@@ -27,6 +27,7 @@ $ARGUMENTS
 2. **Analyze diff** — `git diff --stat` and `git diff --cached --stat` to understand scope.
 3. **Smart stage** — stage related files only. If the user provided a message, stage all. If auto-generating, group by logical change.
 4. **Lint** (if available):
+   - `biome.json` → `npm run lint` (or `biome check .`)
    - `package.json` → `npm run lint` (or `npx eslint .`)
    - `*.py` → `ruff check .` or `flake8`
    - `*.go` → `golangci-lint run`
