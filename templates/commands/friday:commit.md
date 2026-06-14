@@ -24,18 +24,27 @@ $ARGUMENTS
 ## Process
 
 1. **Check changes** — `git status`, stop if no changes.
-2. **Stage** — `git add -A`.
-3. **Run tests**:
+2. **Analyze diff** — `git diff --stat` and `git diff --cached --stat` to understand scope.
+3. **Smart stage** — stage related files only. If the user provided a message, stage all. If auto-generating, group by logical change.
+4. **Lint** (if available):
+   - `package.json` → `npm run lint` (or `npx eslint .`)
+   - `*.py` → `ruff check .` or `flake8`
+   - `*.go` → `golangci-lint run`
+5. **Run tests**:
    - `package.json` → `npm test`
    - `tests/` → `pytest -q`
    - `Cargo.toml` → `cargo test`
-4. **If tests fail** — stop and report.
-5. **Commit** — `git commit -m "$ARGUMENTS"`.
-6. **Show result** — `git log --oneline -1`.
+6. **If lint or tests fail** — stop and report.
+7. **Generate commit message** (if `$ARGUMENTS` is empty):
+   - Analyze `git diff --cached` to determine type and scope.
+   - Use the format: `type(scope): subject`
+   - Generate body with bulleted list of specific changes.
+8. **Commit** — `git commit -m "$ARGUMENTS"`.
+9. **Show result** — `git log --oneline -1`.
 
 ## Rules
 
-- Do not commit with failing verification.
+- Do not commit with failing lint or verification.
 - Use one logical change per commit.
 - Do not mix unrelated files just because they are already modified.
 - Stop and ask if the commit message is ambiguous or empty.
@@ -43,20 +52,53 @@ $ARGUMENTS
 ## Format
 
 Conventional Commits: `type(scope): subject`
+
+```
+type(scope): subject
+
+* change 1
+* change 2
+```
+
 - type: feat / fix / docs / style / refactor / test / chore
-- scope: optional
-- subject: ≤72 chars
+- scope: optional, derived from changed file paths
+- subject: ≤72 chars, imperative mood
+- body: bulleted list of specific changes (in Chinese or English based on context)
+
+### Scope Detection
+
+| Changed files | Scope |
+|---------------|-------|
+| `src/catalog.js`, `src/setup.js` | `core` |
+| `templates/commands/*` | `commands` |
+| `templates/rules/*` | `rules` |
+| `bin/*` | `cli` |
+| `package.json` | `deps` |
+| `*.md` | `docs` |
+| Mixed / unclear | omit scope |
+
+### Message Generation Rules
+
+- **feat**: new file added or new functionality introduced
+- **fix**: bug fix, error handling, or correction
+- **refactor**: restructure without changing behavior
+- **docs**: only markdown or comment changes
+- **test**: only test file changes
+- **chore**: config, deps, CI, tooling
+- **style**: formatting, whitespace, lint fixes
 
 ## Verification
 
 - [ ] There are staged or stageable changes to commit
+- [ ] Lint passes (if configured)
 - [ ] Relevant verification commands have passed
 - [ ] Commit message follows conventional commit format
+- [ ] Commit body lists specific changes
 - [ ] Final commit contains only the intended logical change
 
 ## Output
 
-A single commit with the requested message and validated scope.
+A single commit with the requested or auto-generated message and validated scope.
 
 ## After
 
