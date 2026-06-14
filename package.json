@@ -1,0 +1,44 @@
+{
+  "name": "friday",
+  "version": "0.2.0",
+  "description": "One-click personal dev workflow for AI coding agents",
+  "type": "module",
+  "author": {
+    "name": "yunsur",
+    "url": "https://github.com/yunsur/friday-ai"
+  },
+  "homepage": "https://github.com/yunsur/friday-ai",
+  "repository": "git@github.com:yunsur/friday-ai.git",
+  "files": [
+    "bin/friday.js",
+    "src/catalog.js",
+    "src/setup.js",
+    "templates/",
+    ".claude-plugin/",
+    ".codex-plugin/",
+    "README.md",
+    "README_zh.md"
+  ],
+  "bin": {
+    "friday": "./bin/friday.js"
+  },
+  "keywords": [
+    "ai",
+    "coding",
+    "workflow",
+    "claude",
+    "agent",
+    "specs",
+    "spec-driven",
+    "skills"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "check:package": "node scripts/check-package.js",
+    "sync:metadata": "node scripts/sync-metadata.js",
+    "test": "node --test src/*.test.js bin/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "friday",
+  "version": "0.2.0",
+  "description": "One-click personal dev workflow for AI coding agents — brainstorm, spec, plan, gen, review, verify, commit.",
+  "author": {
+    "name": "yunsur",
+    "url": "https://github.com/yunsur/friday-ai"
+  },
+  "homepage": "https://github.com/yunsur/friday-ai",
+  "repository": "git@github.com:yunsur/friday-ai.git",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "brainstorming",
+    "spec-driven",
+    "planning",
+    "tdd",
+    "code-review",
+    "testing",
+    "deployment"
+  ],
+  "interface": {
+    "displayName": "Friday",
+    "shortDescription": "One-click dev workflow for AI coding agents",
+    "longDescription": "Use Friday to guide agent work through brainstorming, spec writing, implementation planning, code generation, review, verification, and commit workflows.",
+    "developerName": "yunsur",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "I need to implement a new feature.",
+      "Help me review this code."
+    ],
+    "websiteURL": "https://github.com/yunsur/friday-ai",
+    "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
+    "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "brandColor": "#3B82F6",
+    "screenshots": []
+  }
+}
