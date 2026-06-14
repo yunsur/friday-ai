@@ -1,7 +1,7 @@
-import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -9,7 +9,7 @@ const PROJECT_ROOT = join(__dirname, '..');
 const ROOT_CLAUDE = read(join(PROJECT_ROOT, 'CLAUDE.md'));
 const TEMPLATE_CLAUDE = read(join(PROJECT_ROOT, 'templates', 'CLAUDE.md'));
 const SHARED_RULES = [
-  'Keep it simple. If a rule doesn\'t save time, delete it.',
+  "Keep it simple. If a rule doesn't save time, delete it.",
   'Every command is independently runnable. Workflow commands may still recommend the next step.',
   'Spec-first: brainstorm → spec → plan → gen → review → verify → commit.',
   'Conventional Commits: `type(scope): subject`',

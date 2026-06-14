@@ -1,10 +1,10 @@
-import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { execFile } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { promisify } from 'node:util';
+import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const PROJECT_ROOT = join(__dirname, '..');
@@ -53,12 +53,24 @@ describe('package validation', () => {
     assert.ok(!packedFiles.includes('bin/friday.test.js'), 'CLI tests should not be packed');
     assert.ok(!packedFiles.includes('src/setup.test.js'), 'Setup tests should not be packed');
     assert.ok(!packedFiles.includes('src/metadata.test.js'), 'Metadata tests should not be packed');
-    assert.ok(!packedFiles.includes('src/package-validation.test.js'), 'Package validation tests should not be packed');
-    assert.ok(!packedFiles.includes('scripts/check-package.js'), 'Packaging scripts should not be packed');
-    assert.ok(!packedFiles.includes('scripts/sync-metadata.js'), 'Metadata scripts should not be packed');
+    assert.ok(
+      !packedFiles.includes('src/package-validation.test.js'),
+      'Package validation tests should not be packed',
+    );
+    assert.ok(
+      !packedFiles.includes('scripts/check-package.js'),
+      'Packaging scripts should not be packed',
+    );
+    assert.ok(
+      !packedFiles.includes('scripts/sync-metadata.js'),
+      'Metadata scripts should not be packed',
+    );
     assert.ok(!packedFiles.includes('PUBLISHING.md'), 'Publishing guide should not be packed');
     assert.ok(!packedFiles.includes('TESTING.md'), 'Testing guide should not be packed');
-    assert.ok(!packedFiles.includes('CLAUDE.md'), 'Repository-only CLAUDE guide should not be packed');
+    assert.ok(
+      !packedFiles.includes('CLAUDE.md'),
+      'Repository-only CLAUDE guide should not be packed',
+    );
   });
 
   it('should validate npm pack contents', async () => {

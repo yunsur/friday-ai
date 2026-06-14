@@ -1,11 +1,11 @@
-import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
 import { execFile } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { promisify } from 'node:util';
-import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { after, before, describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import { AGENT_FILES, CORE_COMMANDS, MEMORY_TEMPLATES, SPEC_TEMPLATES } from './catalog.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -46,7 +46,10 @@ describe('friday setup', () => {
         assert.ok(existsSync(cmdPath), `Command ${cmd} should exist`);
       }
 
-      assert.ok(!existsSync(join(commandsDir, 'friday.md')), 'Removed root command should not exist');
+      assert.ok(
+        !existsSync(join(commandsDir, 'friday.md')),
+        'Removed root command should not exist',
+      );
     });
 
     it('should have all agent templates', () => {
@@ -170,7 +173,9 @@ describe('friday setup', () => {
       assert.ok(existsSync(join(projectDir, 'specs', firstSpecTemplate)));
       assert.ok(existsSync(join(projectDir, 'memory', firstMemoryTemplate)));
 
-      const settings = JSON.parse(readFileSync(join(homeDir, '.claude', 'settings.local.json'), 'utf-8'));
+      const settings = JSON.parse(
+        readFileSync(join(homeDir, '.claude', 'settings.local.json'), 'utf-8'),
+      );
       assert.deepStrictEqual(settings.mcpServers.context7, {
         command: 'npx',
         args: ['-y', '@upstash/context7-mcp'],
@@ -206,14 +211,21 @@ describe('friday setup', () => {
 
       writeFileSync(specPath, 'stale spec\n');
       writeFileSync(commandPath, 'stale command\n');
-      writeFileSync(settingsPath, JSON.stringify({
-        mcpServers: {
-          context7: {
-            command: 'node',
-            args: ['custom-context7'],
+      writeFileSync(
+        settingsPath,
+        JSON.stringify(
+          {
+            mcpServers: {
+              context7: {
+                command: 'node',
+                args: ['custom-context7'],
+              },
+            },
           },
-        },
-      }, null, 2));
+          null,
+          2,
+        ),
+      );
 
       const { stdout } = await execFileAsync('node', [FRIDAY_CLI, 'init', '--refresh'], {
         cwd: firstRun.projectDir,
@@ -248,10 +260,21 @@ describe('friday setup', () => {
         env: { ...process.env, HOME: join(testDir, name, 'home') },
       });
 
-      assert.ok(stdout.includes(`refresh specs/${firstSpecTemplate}`), 'Should refresh spec template');
+      assert.ok(
+        stdout.includes(`refresh specs/${firstSpecTemplate}`),
+        'Should refresh spec template',
+      );
       assert.ok(stdout.includes(`refresh ${firstCommandTemplate}`), 'Should refresh command');
-      assert.notStrictEqual(readFileSync(specPath, 'utf-8'), 'old spec\n', 'Spec should be overwritten');
-      assert.notStrictEqual(readFileSync(commandPath, 'utf-8'), 'old command\n', 'Command should be overwritten');
+      assert.notStrictEqual(
+        readFileSync(specPath, 'utf-8'),
+        'old spec\n',
+        'Spec should be overwritten',
+      );
+      assert.notStrictEqual(
+        readFileSync(commandPath, 'utf-8'),
+        'old command\n',
+        'Command should be overwritten',
+      );
     });
 
     it('should remove deprecated commands during init', async () => {

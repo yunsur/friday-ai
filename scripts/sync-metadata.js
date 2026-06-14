@@ -50,5 +50,5 @@ function readJson(path) {
 }
 
 function writeJson(path, value) {
-  writeFileSync(path, JSON.stringify(value, null, 2) + '\n');
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
 }

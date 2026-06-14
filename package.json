@@ -36,6 +36,8 @@
   "scripts": {
     "check:package": "node scripts/check-package.js",
     "sync:metadata": "node scripts/sync-metadata.js",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "test": "node --test src/*.test.js bin/*.test.js"
   },
   "engines": {

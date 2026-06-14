@@ -1,17 +1,13 @@
-import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { AGENT_NAMES, COMMAND_SECTIONS } from './catalog.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const PROJECT_ROOT = join(__dirname, '..');
-const DOCUMENTS = [
-  'README.md',
-  'README_zh.md',
-  'templates/CLAUDE.md',
-];
+const DOCUMENTS = ['README.md', 'README_zh.md', 'templates/CLAUDE.md'];
 const ALL_COMMANDS = COMMAND_SECTIONS.flatMap((section) => section.commands);
 
 describe('documentation consistency', () => {
@@ -26,7 +22,7 @@ describe('documentation consistency', () => {
       for (const command of ALL_COMMANDS) {
         assert.ok(
           content.includes(`/${command.name}`),
-          `${documentPath} should mention /${command.name}`
+          `${documentPath} should mention /${command.name}`,
         );
       }
     }
@@ -48,7 +44,7 @@ describe('documentation consistency', () => {
 
       assert.ok(
         !content.includes('/friday              Auto-detect intent and route to the right skill'),
-        `${documentPath} should not mention the removed root command`
+        `${documentPath} should not mention the removed root command`,
       );
     }
   });

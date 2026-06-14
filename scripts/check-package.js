@@ -1,7 +1,7 @@
 import assert from 'node:assert';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -44,7 +44,7 @@ for (const file of requiredFiles) {
 for (const file of packedFiles) {
   assert.ok(
     !forbiddenPatterns.some((pattern) => pattern.test(file)),
-    `${file} should not be included in npm pack output`
+    `${file} should not be included in npm pack output`,
   );
 }
 
@@ -82,7 +82,10 @@ function validateFileReference(relativePath, target) {
   const absoluteTarget = join(ROOT, normalizedTarget);
 
   assert.ok(existsSync(absoluteTarget), `${relativePath} references missing path: ${target}`);
-  assert.ok(packedFiles.has(normalizedTarget), `${relativePath} references unpacked path: ${target}`);
+  assert.ok(
+    packedFiles.has(normalizedTarget),
+    `${relativePath} references unpacked path: ${target}`,
+  );
 }
 
 function getValue(obj, keys) {

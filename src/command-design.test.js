@@ -1,7 +1,7 @@
-import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { AGENT_NAMES, COMMANDS, CORE_COMMANDS } from './catalog.js';
 
@@ -9,7 +9,13 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const PROJECT_ROOT = join(__dirname, '..');
 const ALL_COMMAND_NAMES = new Set(COMMANDS.map((command) => command.name));
 const CATALOG_BY_NAME = new Map(COMMANDS.map((command) => [command.name, command]));
-const REQUIRED_SECTIONS = ['## When to Use', '## Process', '## Rules', '## Verification', '## Output'];
+const REQUIRED_SECTIONS = [
+  '## When to Use',
+  '## Process',
+  '## Rules',
+  '## Verification',
+  '## Output',
+];
 const VALID_SKILL_SOURCES = new Set(['none', 'skills.sh', 'everything-claude-code']);
 
 describe('command design', () => {
@@ -37,27 +43,57 @@ describe('command design', () => {
       const metadata = parseFrontmatter(readCommand(relativePath));
 
       assert.ok(catalogEntry, `${commandName} should exist in the catalog`);
-      assert.strictEqual(metadata.kind, catalogEntry.kind, `${commandName} should declare the right kind`);
+      assert.strictEqual(
+        metadata.kind,
+        catalogEntry.kind,
+        `${commandName} should declare the right kind`,
+      );
       assert.ok(
         isDescriptionAligned(catalogEntry.description, metadata.description),
-        `${commandName} frontmatter description should stay aligned with catalog description`
+        `${commandName} frontmatter description should stay aligned with catalog description`,
       );
-      assert.ok(AGENT_NAMES.includes(metadata.primary_agent), `${commandName} should declare a valid primary agent`);
-      assert.ok(VALID_SKILL_SOURCES.has(metadata.skill_source), `${commandName} should declare a valid skill source`);
-      assert.ok(Array.isArray(metadata.requires_skills), `${commandName} should declare requires_skills as an array`);
-      assert.ok(Array.isArray(metadata.recommended_next), `${commandName} should declare recommended_next as an array`);
+      assert.ok(
+        AGENT_NAMES.includes(metadata.primary_agent),
+        `${commandName} should declare a valid primary agent`,
+      );
+      assert.ok(
+        VALID_SKILL_SOURCES.has(metadata.skill_source),
+        `${commandName} should declare a valid skill source`,
+      );
+      assert.ok(
+        Array.isArray(metadata.requires_skills),
+        `${commandName} should declare requires_skills as an array`,
+      );
+      assert.ok(
+        Array.isArray(metadata.recommended_next),
+        `${commandName} should declare recommended_next as an array`,
+      );
 
       for (const nextCommand of metadata.recommended_next) {
-        assert.ok(ALL_COMMAND_NAMES.has(nextCommand), `${commandName} should recommend only existing commands`);
-        assert.notStrictEqual(nextCommand, commandName, `${commandName} should not recommend itself`);
+        assert.ok(
+          ALL_COMMAND_NAMES.has(nextCommand),
+          `${commandName} should recommend only existing commands`,
+        );
+        assert.notStrictEqual(
+          nextCommand,
+          commandName,
+          `${commandName} should not recommend itself`,
+        );
       }
 
       if (metadata.skill_source === 'everything-claude-code') {
-        assert.ok(metadata.requires_skills.length > 0, `${commandName} should declare ECC skill dependencies`);
+        assert.ok(
+          metadata.requires_skills.length > 0,
+          `${commandName} should declare ECC skill dependencies`,
+        );
       }
 
       if (metadata.skill_source === 'none') {
-        assert.strictEqual(metadata.requires_skills.length, 0, `${commandName} should not declare skill dependencies`);
+        assert.strictEqual(
+          metadata.requires_skills.length,
+          0,
+          `${commandName} should not declare skill dependencies`,
+        );
       }
     }
   });

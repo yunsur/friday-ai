@@ -62,23 +62,25 @@ function fail(message) {
 }
 
 function showHelp() {
-  console.log([
-    'friday — one-click dev workflow',
-    '',
-    'Usage:',
-    '  npx friday init              Set up workflow in current project',
-    '  npx friday init --force      Overwrite all friday-managed files',
-    '  npx friday --help            Show this help',
-    '  npx friday --version         Show CLI version',
-    '',
-    'Commands available after init:',
-    '',
-    renderCommandSections(),
-    '',
-    renderAgentsLine(),
-    '',
-    'Notes:',
-    '  friday commands run independently, but may recommend next steps in the workflow.',
-    '  Existing files are preserved by default. Use --force to overwrite friday-managed files.',
-  ].join('\n'));
+  console.log(
+    [
+      'friday — one-click dev workflow',
+      '',
+      'Usage:',
+      '  npx friday init              Set up workflow in current project',
+      '  npx friday init --force      Overwrite all friday-managed files',
+      '  npx friday --help            Show this help',
+      '  npx friday --version         Show CLI version',
+      '',
+      'Commands available after init:',
+      '',
+      renderCommandSections(),
+      '',
+      renderAgentsLine(),
+      '',
+      'Notes:',
+      '  friday commands run independently, but may recommend next steps in the workflow.',
+      '  Existing files are preserved by default. Use --force to overwrite friday-managed files.',
+    ].join('\n'),
+  );
 }

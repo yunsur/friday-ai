@@ -1,8 +1,16 @@
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { homedir } from 'node:os';
-import { AGENT_FILES, CORE_COMMANDS, DEPRECATED_COMMANDS, MEMORY_TEMPLATES, SPEC_TEMPLATES, renderAgentsLine, renderCommandSections } from './catalog.js';
+import {
+  AGENT_FILES,
+  CORE_COMMANDS,
+  DEPRECATED_COMMANDS,
+  MEMORY_TEMPLATES,
+  renderAgentsLine,
+  renderCommandSections,
+  SPEC_TEMPLATES,
+} from './catalog.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TEMPLATES = join(__dirname, '..', 'templates');
@@ -121,7 +129,15 @@ function copyAgents({ refresh = false } = {}) {
   });
 }
 
-function copyFiles({ title, srcDir, destDir, files, action, displayPath = (file) => file, refresh = false }) {
+function copyFiles({
+  title,
+  srcDir,
+  destDir,
+  files,
+  action,
+  displayPath = (file) => file,
+  refresh = false,
+}) {
   console.log(title);
   mkdirSync(destDir, { recursive: true });
 
@@ -169,6 +185,6 @@ function setupContext7({ refresh = false } = {}) {
   };
 
   mkdirSync(dirname(configPath), { recursive: true });
-  writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
+  writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
   console.log(refresh ? '   context7 MCP refreshed' : '   context7 MCP configured');
 }

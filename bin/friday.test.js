@@ -1,10 +1,10 @@
-import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import { AGENT_NAMES, COMMAND_SECTIONS } from '../src/catalog.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -40,7 +40,10 @@ describe('friday CLI', () => {
     assert.ok(stdout.includes('Commands available'), 'Should show commands section');
     assert.ok(stdout.includes('npx friday init --force'), 'Should document force mode');
     assert.ok(stdout.includes('npx friday --version'), 'Should document version flag');
-    assert.ok(!stdout.includes('/friday              Auto-detect intent and route to the right skill'), 'Should not list removed root command');
+    assert.ok(
+      !stdout.includes('/friday              Auto-detect intent and route to the right skill'),
+      'Should not list removed root command',
+    );
 
     for (const command of FLAT_COMMANDS) {
       assert.ok(stdout.includes(`/${command.name}`), `Should list ${command.name}`);
