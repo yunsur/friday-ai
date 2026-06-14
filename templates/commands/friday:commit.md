@@ -26,26 +26,23 @@ $ARGUMENTS
 1. **Check changes** — `git status`, stop if no changes.
 2. **Analyze diff** — `git diff --stat` and `git diff --cached --stat` to understand scope.
 3. **Smart stage** — stage related files only. If the user provided a message, stage all. If auto-generating, group by logical change.
-4. **Lint** (if available):
-   - `biome.json` → `npm run lint` (or `biome check .`)
-   - `package.json` → `npm run lint` (or `npx eslint .`)
-   - `*.py` → `ruff check .` or `flake8`
-   - `*.go` → `golangci-lint run`
-5. **Run tests**:
+4. **Run tests**:
    - `package.json` → `npm test`
    - `tests/` → `pytest -q`
    - `Cargo.toml` → `cargo test`
-6. **If lint or tests fail** — stop and report.
-7. **Generate commit message** (if `$ARGUMENTS` is empty):
+5. **If tests fail** — stop and report.
+6. **Generate commit message** (if `$ARGUMENTS` is empty):
    - Analyze `git diff --cached` to determine type and scope.
    - Use the format: `type(scope): subject`
    - Generate body with bulleted list of specific changes.
-8. **Commit** — `git commit -m "$ARGUMENTS"`.
-9. **Show result** — `git log --oneline -1`.
+7. **Commit** — `git commit -m "$ARGUMENTS"`.
+8. **Show result** — `git log --oneline -1`.
+
+> **Note:** Lint is not run automatically by default. Run `npm run lint` (or `biome check .`) manually before committing if needed.
 
 ## Rules
 
-- Do not commit with failing lint or verification.
+- Do not commit with failing verification.
 - Use one logical change per commit.
 - Do not mix unrelated files just because they are already modified.
 - Stop and ask if the commit message is ambiguous or empty.
@@ -91,7 +88,6 @@ type(scope): subject
 ## Verification
 
 - [ ] There are staged or stageable changes to commit
-- [ ] Lint passes (if configured)
 - [ ] Relevant verification commands have passed
 - [ ] Commit message follows conventional commit format
 - [ ] Commit body lists specific changes
