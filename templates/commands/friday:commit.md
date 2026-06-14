@@ -1,5 +1,5 @@
 ---
-description: One-click commit (lint + test + commit).
+description: One-click commit (lint + test + commit). Manual only — never auto-triggered.
 kind: workflow
 primary_agent: developer
 skill_source: none
@@ -10,6 +10,8 @@ recommended_next: []
 # Commit
 
 Commit current changes with lint and test checks.
+
+> **Manual only** — This command must be explicitly invoked by the user. Never auto-trigger from other workflows.
 
 ## Input
 
@@ -26,23 +28,28 @@ $ARGUMENTS
 1. **Check changes** — `git status`, stop if no changes.
 2. **Analyze diff** — `git diff --stat` and `git diff --cached --stat` to understand scope.
 3. **Smart stage** — stage related files only. If the user provided a message, stage all. If auto-generating, group by logical change.
-4. **Run tests**:
+4. **Lint** (if configured):
+   - Check `package.json` for `lint` script → `npm run lint`
+   - Check `biome.json` → `biome check .`
+   - Check `*.py` → `ruff check .` or `flake8`
+   - Check `*.go` → `golangci-lint run`
+   - Skip if no lint tool detected
+5. **Run tests**:
    - `package.json` → `npm test`
    - `tests/` → `pytest -q`
    - `Cargo.toml` → `cargo test`
-5. **If tests fail** — stop and report.
-6. **Generate commit message** (if `$ARGUMENTS` is empty):
+6. **If lint or tests fail** — stop and report.
+7. **Generate commit message** (if `$ARGUMENTS` is empty):
    - Analyze `git diff --cached` to determine type and scope.
    - Use the format: `type(scope): subject`
    - Generate body with bulleted list of specific changes.
-7. **Commit** — `git commit -m "$ARGUMENTS"`.
-8. **Show result** — `git log --oneline -1`.
-
-> **Note:** Lint is not run automatically by default. Run `npm run lint` (or `biome check .`) manually before committing if needed.
+8. **Commit** — `git commit -m "$ARGUMENTS"`.
+9. **Show result** — `git log --oneline -1`.
 
 ## Rules
 
-- Do not commit with failing verification.
+- This command is manual only — never auto-triggered by other workflows.
+- Do not commit with failing lint or tests.
 - Use one logical change per commit.
 - Do not mix unrelated files just because they are already modified.
 - Stop and ask if the commit message is ambiguous or empty.
@@ -88,7 +95,8 @@ type(scope): subject
 ## Verification
 
 - [ ] There are staged or stageable changes to commit
-- [ ] Relevant verification commands have passed
+- [ ] Lint passes (if configured)
+- [ ] Tests pass
 - [ ] Commit message follows conventional commit format
 - [ ] Commit body lists specific changes
 - [ ] Final commit contains only the intended logical change
